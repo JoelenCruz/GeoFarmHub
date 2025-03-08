@@ -1,0 +1,53 @@
+FROM python:3.11.3-alpine3.18
+
+# This environment variable is used to control whether Python should
+# write bytecode (.pyc) files to disk. 1 = No, 0 = Yes
+ENV PYTHONDONTWRITEBYTECODE 1
+
+# Specifies that Python output will be displayed immediately on the console or other output devices, without being buffered.
+# In short, you will see Python output in real time.
+ENV PYTHONUNBUFFERED 1
+
+# Copy the "djangoapp" and "scripts" folders into the container.
+COPY djangoapp /djangoapp
+COPY scripts /scripts
+
+# Copy the data/web/media folder to /data/web/media
+# (Adjust if the real folder on the host is "data/web/media")
+# COPY data/web/media /data/web/media
+
+# Enter the djangoapp folder in the container
+WORKDIR /djangoapp
+
+# Port 8000 will be available for external connections to the container
+# This is the port we will use for Django.
+EXPOSE 8000
+
+# Install Python dependencies
+RUN python -m venv /venv && \
+    /venv/bin/pip install --upgrade pip && \
+    /venv/bin/pip install -r /djangoapp/requirements.txt
+
+# RUN executes commands in a shell inside the container to build the image.
+# The result of running the command is stored in the image's file system as a new layer.
+# Grouping the commands into a single RUN can reduce the number of layers in the image and make it more efficient.
+RUN adduser --disabled-password --no-create-home duser && \
+    mkdir -p /data/web/static && \
+    mkdir -p /data/web/media && \
+    chown -R duser:duser /venv && \
+    chown -R duser:duser /data/web/static && \
+    chown -R duser:duser /data/web/media && \
+    chmod -R 755 /data/web/static && \
+    chmod -R 755 /data/web/media && \ 
+    chown -R 1000:1000 /data/web/static && \ 
+    chown -R 1000:1000 /data/web/media && \ 
+    chmod -R +x /scripts
+
+# Add the scripts and venv/bin folders to the container's $PATH.
+ENV PATH="/scripts:/venv/bin:$PATH" 
+
+# Change the user to duser
+USER duser
+
+# Run the scripts/commands.sh file
+CMD ["commands.sh"]

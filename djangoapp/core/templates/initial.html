@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}initial - GeoFarmHub{% endblock %}
+
+{% block content %}
+<div class="text-center mt-5">
+    <h1 class="display-4">Welcome to GeoFarmHub!</h1>
+    <p class="lead">Your platform for agricultural monitoring and management.</p>
+    <div class="mt-4">
+        <a href="{% url 'login' %}" class="btn btn-primary btn-lg">Login</a>
+        <a href="{% url 'register' %}" class="btn btn-success btn-lg">Register</a>
+    </div>
+</div>
+{% endblock %}
