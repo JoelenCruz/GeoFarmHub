@@ -34,6 +34,9 @@
                             <a class="nav-link" href="{% url 'transaction_list' %}">Transações</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="{% url 'menu' %}">Menu</a>
+                        </li>
+                        <li class="nav-item">
                             <form action="{% url 'logout' %}" method="post" class="d-inline">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-danger">Logout</button>

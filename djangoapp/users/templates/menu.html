@@ -1,55 +1,29 @@
 {% extends "base.html" %}
 
-{% block title %}initial - GeoFarmHub{% endblock %}
+{% block title %}Home - GeoFarmHub{% endblock %}
 
 {% block content %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="{% url 'initial' %}">GeoFarmHub</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register' %}">Register</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'client_list' %}">Clientes</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'farm_list' %}">Fazendas</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'transaction_list' %}">Transações</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
 <div class="container text-center mt-5">
     <h1 class="display-4">Welcome to GeoFarmHub!</h1>
     <p class="lead">Your platform for agricultural monitoring and management.</p>
 
+    {% if user.is_authenticated %}
     <div class="row mt-4">
         <div class="col-md-4">
-            <a href="{% url 'client_list' %}" class="btn btn-outline-primary btn-lg w-100">Gerenciar Clientes</a>
+            <a href="{% url 'client_list' %}" class="btn btn-outline-primary btn-lg w-100">Manage Clients</a>
         </div>
         <div class="col-md-4">
-            <a href="{% url 'farm_list' %}" class="btn btn-outline-success btn-lg w-100">Gerenciar Fazendas</a>
+            <a href="{% url 'farm_list' %}" class="btn btn-outline-success btn-lg w-100">Manage Farms</a>
         </div>
         <div class="col-md-4">
-            <a href="{% url 'transaction_list' %}" class="btn btn-outline-warning btn-lg w-100">Gerenciar Transações</a>
+            <a href="{% url 'transaction_list' %}" class="btn btn-outline-warning btn-lg w-100">Manage Transactions</a>
         </div>
     </div>
-
+    {% else %}
     <div class="mt-5">
         <a href="{% url 'login' %}" class="btn btn-primary btn-lg">Login</a>
         <a href="{% url 'register' %}" class="btn btn-success btn-lg">Register</a>
     </div>
+    {% endif %}
 </div>
 {% endblock %}

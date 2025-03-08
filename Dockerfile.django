@@ -1,53 +1,62 @@
 FROM python:3.11.3-alpine3.18
 
-# This environment variable is used to control whether Python should
-# write bytecode (.pyc) files to disk. 1 = No, 0 = Yes
+# Evita gerar arquivos .pyc e melhora os logs
 ENV PYTHONDONTWRITEBYTECODE 1
-
-# Specifies that Python output will be displayed immediately on the console or other output devices, without being buffered.
-# In short, you will see Python output in real time.
 ENV PYTHONUNBUFFERED 1
 
-# Copy the "djangoapp" and "scripts" folders into the container.
-COPY djangoapp /djangoapp
-COPY scripts /scripts
+# Instala dependências do sistema necessárias para o Django + PostGIS
+RUN apk update && apk add --no-cache \
+    postgresql-client \
+    postgresql-dev \
+    postgis \
+    gdal \
+    gdal-dev \
+    geos \
+    geos-dev \
+    proj \
+    proj-dev \
+    sqlite-dev \
+    python3-dev \
+    gcc \
+    musl-dev \
+    libffi-dev \
+    jpeg-dev \
+    zlib-dev \
+    freetype-dev
 
-# Copy the data/web/media folder to /data/web/media
-# (Adjust if the real folder on the host is "data/web/media")
-# COPY data/web/media /data/web/media
-
-# Enter the djangoapp folder in the container
+# Define o diretório de trabalho
 WORKDIR /djangoapp
 
-# Port 8000 will be available for external connections to the container
-# This is the port we will use for Django.
-EXPOSE 8000
+# Copia apenas o requirements.txt primeiro para aproveitar cache do Docker
+COPY djangoapp/requirements.txt /djangoapp/requirements.txt
 
-# Install Python dependencies
+# Cria um ambiente virtual e instala dependências do Python
 RUN python -m venv /venv && \
     /venv/bin/pip install --upgrade pip && \
     /venv/bin/pip install -r /djangoapp/requirements.txt
 
-# RUN executes commands in a shell inside the container to build the image.
-# The result of running the command is stored in the image's file system as a new layer.
-# Grouping the commands into a single RUN can reduce the number of layers in the image and make it more efficient.
+# Copia o restante do código da aplicação
+COPY djangoapp /djangoapp
+COPY scripts /scripts
+
+# Dá permissão de execução ao script de inicialização
+RUN chmod +x /scripts/commands.sh
+
+# Define permissões para usuário não-root
 RUN adduser --disabled-password --no-create-home duser && \
-    mkdir -p /data/web/static && \
-    mkdir -p /data/web/media && \
-    chown -R duser:duser /venv && \
-    chown -R duser:duser /data/web/static && \
-    chown -R duser:duser /data/web/media && \
-    chmod -R 755 /data/web/static && \
-    chmod -R 755 /data/web/media && \ 
-    chown -R 1000:1000 /data/web/static && \ 
-    chown -R 1000:1000 /data/web/media && \ 
-    chmod -R +x /scripts
+    mkdir -p /data/web/static /data/web/media && \
+    chown -R duser:duser /venv /data/web/static /data/web/media && \
+    chmod -R 755 /data/web/static /data/web/media
 
-# Add the scripts and venv/bin folders to the container's $PATH.
-ENV PATH="/scripts:/venv/bin:$PATH" 
+# Define caminhos das bibliotecas GIS
+ENV GEOS_LIBRARY_PATH=/usr/lib/libgeos_c.so
+ENV GDAL_LIBRARY_PATH=/usr/lib/libgdal.so
 
-# Change the user to duser
+# Adiciona os scripts e venv/bin ao PATH
+ENV PATH="/scripts:/venv/bin:$PATH"
+
+# Altera o usuário para não rodar como root
 USER duser
 
-# Run the scripts/commands.sh file
-CMD ["commands.sh"]
+# Comando de inicialização
+CMD ["sh", "/scripts/commands.sh"]

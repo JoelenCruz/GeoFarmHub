@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Farms - GeoFarmHub{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Farms</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr><th>ID</th><th>Name</th><th>Owner</th><th>Area (Hectares)</th></tr>
+        </thead>
+        <tbody>
+            {% for farm in farms %}
+            <tr>
+                <td>{{ farm.id }}</td>
+                <td>{{ farm.name }}</td>
+                <td>{{ farm.owner.name }}</td>
+                <td>{{ farm.area_hectares }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3>Add New Farm</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Create Farm</button>
+    </form>
+</div>
+{% endblock %}

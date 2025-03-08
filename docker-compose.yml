@@ -1,3 +1,4 @@
+version: '3.8'
 services:
   frontend:
     container_name: nginx
@@ -38,7 +39,7 @@ services:
 
   psql:
     container_name: psql
-    image: postgres:13-alpine
+    image: postgis/postgis:15-3.3
     volumes:
       - ./data/postgres/data:/var/lib/postgresql/data/
     env_file:

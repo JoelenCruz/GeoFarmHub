@@ -12,7 +12,7 @@ Pillow #for imagens in database
 requests
 requests-oauthlib
 ngrok
-whitenoise #for debug false
+whitenoise #pra que mesmo? 
 
 autobahn>=22.3 #for debug sql
 django-extensions>=3.2.3,<3.3 #for debug sql
