@@ -1,4 +1,4 @@
-/djangoapp/data/
+/djangoapp/media/
 *djangoapp/static/images/custom
 /djangoapp/project/local_settings.py
 gunicorn-error-log
