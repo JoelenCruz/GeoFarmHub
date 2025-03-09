@@ -1,6 +1,7 @@
 # GeoFarmHub
 GeoFarm Hub is a Django REST API with PostGIS, designed for managing clients, farms, and transactions in a real estate business.
 
+------------------------------------------------------------
 
 ## Prerequisites
 
@@ -34,3 +35,32 @@ Services: The application uses Docker Compose to run the Django API, PostgreSQL 
 Makefile: The Makefile includes common commands to build, start, and manage the application.
 
 <img src="https://github.com/user-attachments/assets/e09c83fe-d620-4567-bfe5-35b1196fb353" alt="image" width="400" />
+
+
+------------------------------------------------------------
+
+## API
+
+All API endpoints are relative to the base URL:
+
+  https://localhost:8443/api/
+
+
+
+### ENDPOINTS
+
+
+#### Clients
+
+https://localhost:8443/api/clients/
+  
+
+#### Farms
+
+https://localhost:8443/api/farms/
+
+
+#### Transactions
+
+https://localhost:8443/api/transactions/
+
