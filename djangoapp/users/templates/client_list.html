@@ -1,31 +1,40 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Clients - GeoFarmHub{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
-    <h2>Clients</h2>
-    <table class="table table-striped">
-        <thead>
-            <tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th></tr>
-        </thead>
-        <tbody>
-            {% for client in clients %}
-            <tr>
-                <td>{{ client.id }}</td>
-                <td>{{ client.name }}</td>
-                <td>{{ client.email }}</td>
-                <td>{{ client.phone }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+  <h2>Clients</h2>
+  <table class="table table-striped" id="clients-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for client in clients %}
+      <tr data-client-id="{{ client.id }}">
+        <td>{{ client.id }}</td>
+        <td>{{ client.name }}</td>
+        <td>{{ client.email }}</td>
+        <td>{{ client.phone }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
-    <h3>Add New Client</h3>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Create Client</button>
-    </form>
+  <h3>Add New Client</h3>
+  <form id="client-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Create Client</button>
+  </form>
 </div>
+
+<script src="{% static 'js/utils.js' %}"></script>
+<script src="{% static 'js/client_list_api.js' %}"></script>
 {% endblock %}

@@ -1,11 +1,12 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Transactions - GeoFarmHub{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
     <h2>Transactions</h2>
-    <table class="table table-striped">
+    <table class="table table-striped" id="transactions-table">
         <thead>
             <tr><th>ID</th><th>Client</th><th>Farm</th><th>Date</th><th>Price</th></tr>
         </thead>
@@ -23,10 +24,14 @@
     </table>
 
     <h3>Add New Transaction</h3>
-    <form method="post">
+    <form id="transaction-form">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-primary">Create Transaction</button>
     </form>
 </div>
+
+<script src="{% static 'js/utils.js' %}"></script>
+<script src="{% static 'js/transactions_list.js' %}"></script>
+
 {% endblock %}

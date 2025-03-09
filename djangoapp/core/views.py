@@ -1,7 +1,7 @@
-from rest_framework import viewsets
-from users.models import Client, Farm, Transaction  # ✅ Use absolute import
-from users.serializers import ClientSerializer, FarmSerializer, TransactionSerializer  # ✅ Update this import
 from django.shortcuts import render
+from rest_framework import viewsets
+from users.models import Client, Farm, Transaction
+from .serializers import ClientSerializer, FarmSerializer, TransactionSerializer
 
 
 def initial(request):

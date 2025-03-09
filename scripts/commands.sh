@@ -1,8 +1,5 @@
 #!/bin/sh
 
-# mkdir -p /data/web/media/avatars
-# cp -r /djangoapp/static/images/avatars/* /data/web/media/avatars/
-
 # The shell will terminate script execution when a command fails
 set -e
 

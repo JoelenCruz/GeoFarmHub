@@ -15,6 +15,7 @@ class Farm(models.Model):
     location = models.PolygonField(null=True, blank=True)# Campo GIS onde você guardará a geometria extraída do KML
     owner = models.ForeignKey('Client', on_delete=models.CASCADE)
     area_hectares = models.DecimalField(max_digits=10, decimal_places=2)
+    is_sold = models.BooleanField(default=False) 
 
     def __str__(self):
         return self.name

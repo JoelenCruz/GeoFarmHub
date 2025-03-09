@@ -23,7 +23,6 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(DATA_DIR, 'media')
 
-AVATAR_UPLOAD_DIR = os.path.join(MEDIA_ROOT, 'avatars')
 
 
 
@@ -51,6 +50,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'django.contrib.gis',
+    "rest_framework",
     "core",
     "users",
 ]

@@ -1,13 +1,19 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Farms - GeoFarmHub{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
     <h2>Farms</h2>
-    <table class="table table-striped">
+    <table class="table table-striped" id="farms-table">
         <thead>
-            <tr><th>ID</th><th>Name</th><th>Owner</th><th>Area (Hectares)</th></tr>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Owner</th>
+                <th>Area (Hectares)</th>
+            </tr>
         </thead>
         <tbody>
             {% for farm in farms %}
@@ -22,10 +28,14 @@
     </table>
 
     <h3>Add New Farm</h3>
-    <form method="post">
+    <!-- Remova o 'method="post"' ou deixe, mas ele será interceptado pelo JS -->
+    <form id="farm-form">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-primary">Create Farm</button>
     </form>
 </div>
+
+<script src="{% static 'js/utils.js' %}"></script>
+<script src="{% static 'js/farm_list_api.js' %}"></script>
 {% endblock %}

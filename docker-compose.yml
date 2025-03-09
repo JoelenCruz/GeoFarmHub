@@ -29,7 +29,6 @@ services:
       - ./djangoapp:/djangoapp
       - ./data/web/static:/data/web/static/
       - ./data/web/media:/data/web/media/
-    user: "${UID}:${GID}"
     env_file:
       - ./dotenv_files/.env
     depends_on:
