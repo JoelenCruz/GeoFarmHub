@@ -34,3 +34,5 @@ Services: The application uses Docker Compose to run the Django API, PostgreSQL 
 Makefile: The Makefile includes common commands to build, start, and manage the application.
 Environment Variables: Update the .env file (if provided) to configure database credentials, the Django secret key, and other settings.
 Persistent Data: Ensure your PostgreSQL data is stored in a persistent Docker volume to avoid data loss when containers are recreated.
+
+![image](https://github.com/user-attachments/assets/e09c83fe-d620-4567-bfe5-35b1196fb353)
