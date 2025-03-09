@@ -1,58 +1,61 @@
-FROM python:3.11.3-alpine3.18
+FROM osgeo/gdal:alpine-small-3.6.3
 
 # Evita gerar arquivos .pyc e melhora os logs
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-# Instala dependências do sistema necessárias para o Django + PostGIS
+# Atualiza o sistema e instala dependências necessárias
 RUN apk update && apk add --no-cache \
+    python3 \
+    python3-dev \
+    py3-pip \
     postgresql-client \
     postgresql-dev \
     postgis \
-    gdal \
-    gdal-dev \
-    geos \
     geos-dev \
-    proj \
     proj-dev \
     sqlite-dev \
-    python3-dev \
+    build-base \
     gcc \
+    g++ \
     musl-dev \
     libffi-dev \
     jpeg-dev \
     zlib-dev \
     freetype-dev
 
+# Cria um link simbólico para garantir que 'python' aponte para python3
+RUN ln -sf python3 /usr/bin/python
+
 # Define o diretório de trabalho
 WORKDIR /djangoapp
 
-# Copia apenas o requirements.txt primeiro para aproveitar cache do Docker
+# Copia o requirements.txt para aproveitar o cache do Docker
 COPY djangoapp/requirements.txt /djangoapp/requirements.txt
 
-# Cria um ambiente virtual e instala dependências do Python
+# Cria um ambiente virtual e instala as dependências Python
 RUN python -m venv /venv && \
     /venv/bin/pip install --upgrade pip && \
     /venv/bin/pip install -r /djangoapp/requirements.txt
 
-# Copia o restante do código da aplicação
+# Copia o restante do código da aplicação e scripts
 COPY djangoapp /djangoapp
 COPY scripts /scripts
 
 # Dá permissão de execução ao script de inicialização
 RUN chmod +x /scripts/commands.sh
 
-# Define permissões para usuário não-root
-RUN adduser --disabled-password --no-create-home duser && \
+# Cria um usuário não-root e ajusta as permissões necessárias
+RUN adduser -D duser && \
     mkdir -p /data/web/static /data/web/media && \
     chown -R duser:duser /venv /data/web/static /data/web/media && \
     chmod -R 755 /data/web/static /data/web/media
 
-# Define caminhos das bibliotecas GIS
+# Define variáveis de ambiente para as bibliotecas GIS
 ENV GEOS_LIBRARY_PATH=/usr/lib/libgeos_c.so
 ENV GDAL_LIBRARY_PATH=/usr/lib/libgdal.so
 
-# Adiciona os scripts e venv/bin ao PATH
+# Adiciona os diretórios dos scripts e do venv ao PATH
 ENV PATH="/scripts:/venv/bin:$PATH"
 
 # Altera o usuário para não rodar como root

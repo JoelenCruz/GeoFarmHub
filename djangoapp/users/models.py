@@ -8,14 +8,17 @@ class Client(models.Model):
     def __str__(self):
         return self.name
 
+
 class Farm(models.Model):
     name = models.CharField(max_length=255)
-    location = models.PointField()  # Ensure PostGIS is enabled
-    owner = models.ForeignKey(Client, on_delete=models.CASCADE)  # Add this field if missing
-    area_hectares = models.DecimalField(max_digits=10, decimal_places=2)  # Add this if needed
+    kml_file = models.FileField(upload_to='kmls/', null=True, blank=True) # Campo para armazenar o arquivo KML enviado
+    location = models.PolygonField(null=True, blank=True)# Campo GIS onde você guardará a geometria extraída do KML
+    owner = models.ForeignKey('Client', on_delete=models.CASCADE)
+    area_hectares = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
         return self.name
+
 
 class Transaction(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
