@@ -23,20 +23,9 @@ document.getElementById('client-form').addEventListener('submit', async function
             alert('Error: ' + JSON.stringify(errorData));
             return;
         }
+        window.location.reload();
 
-        const newClient = await response.json();
-        const tableBody = document.querySelector('#clients-table tbody');
-        const newRow = document.createElement('tr');
-        newRow.setAttribute('data-client-id', newClient.id);
-        newRow.innerHTML = `
-          <td>${newClient.id}</td>
-          <td>${newClient.name}</td>
-          <td>${newClient.email}</td>
-          <td>${newClient.phone}</td>
-        `;
-        tableBody.appendChild(newRow);
-
-        form.reset();
+       
     } catch (error) {
         console.error('Request error:', error);
     }

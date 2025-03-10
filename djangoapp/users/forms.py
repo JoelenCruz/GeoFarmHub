@@ -1,12 +1,13 @@
 import json
-import os
-from django.contrib.gis.geos import GEOSGeometry
 from django import forms
+from django.contrib.gis.geos import GEOSGeometry
 from .models import Client
 from .models import Transaction
 from .models import Farm
 from osgeo import ogr
 from django.contrib.gis.gdal import DataSource
+import os
+
 
 
 
@@ -31,9 +32,7 @@ class ClientForm(forms.ModelForm):
         model = Client
         fields = ['name', 'email', 'phone']
 
-import os
-from django import forms
-from .models import Transaction
+
 
 class TransactionForm(forms.ModelForm):
     class Meta:

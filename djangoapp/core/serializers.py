@@ -18,7 +18,6 @@ class TransactionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def validate(self, data):
-        """Valida se a fazenda pode ser vendida."""
         farm = data.get('farm')
         transaction_type = data.get('transaction_type')
 
@@ -31,7 +30,6 @@ class TransactionSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         transaction = super().create(validated_data)
-        # Se for venda e ainda não estiver vendida, marca como vendida
         if transaction.transaction_type == "sell" and not transaction.farm.is_sold:
             farm = transaction.farm
             farm.is_sold = True
