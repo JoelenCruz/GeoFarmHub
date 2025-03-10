@@ -20,16 +20,21 @@ class TransactionSerializer(serializers.ModelSerializer):
     def validate(self, data):
         farm = data.get('farm')
         transaction_type = data.get('transaction_type')
+        client = data.get('client')
 
-        # Exemplo de regra: se for "sell" e a fazenda já estiver vendida, dá erro.
-        # (Isso depende de como você define "is_sold" no modelo.)
-        if transaction_type == "sell" and farm.is_sold:
-            raise serializers.ValidationError("Esta fazenda já foi vendida.")
+        if transaction_type == "sell":
+            # Ensure that the client making the sale is the owner of the farm.
+            if farm.owner != client:
+                raise serializers.ValidationError("You can only sell a farm that you own.")
 
+            # Ensure that the farm has not already been sold.
+            if farm.is_sold:
+                raise serializers.ValidationError("This farm has already been sold.")
         return data
 
     def create(self, validated_data):
         transaction = super().create(validated_data)
+        # After a successful sale transaction, mark the farm as sold.
         if transaction.transaction_type == "sell" and not transaction.farm.is_sold:
             farm = transaction.farm
             farm.is_sold = True

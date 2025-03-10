@@ -38,24 +38,3 @@ class TransactionForm(forms.ModelForm):
     class Meta:
         model = Transaction
         fields = ['client', 'farm', 'transaction_type', 'price']
-
-    def clean(self):
-        cleaned_data = super().clean()
-        transaction_type = cleaned_data.get('transaction_type')
-        client = cleaned_data.get('client')
-        farm = cleaned_data.get('farm')
-
-        if transaction_type == 'sell':
-            # Only allow selling if the client is the owner of the farm
-            if farm and farm.owner != client:
-                raise forms.ValidationError("You can only sell a farm that you own.")
-
-            # Ensure the farm can only be sold once.
-            # Option 1: If your Farm model has an "is_sold" field:
-            if farm and getattr(farm, 'is_sold', False):
-                raise forms.ValidationError("This farm has already been sold.")
-        return cleaned_data
-
-
-
-
